@@ -386,7 +386,10 @@ class FreelinePlugin implements Plugin<Project> {
                 }
 
                 if (multiDexEnabled && applicationProxy) {
-                    def manifestKeepFile = new File("${project.buildDir}/intermediates/multi-dex/${variant.dirName}/manifest_keep.txt")
+                    def subName = productFlavor + "Debug"
+                    def sName = "process" + subName + "Resources"
+                    def manifestKeepFile = new File("${project.buildDir}/intermediates/legacy_multidex_aapt_derived_proguard_rules/${subName}/${sName}/manifest_keep.txt")
+//                    def manifestKeepFile = new File("${project.buildDir}/intermediates/multi-dex/${variant.dirName}/manifest_keep.txt")
                     if (multiDexListTask) {
                         multiDexListTask.outputs.upToDateWhen { false }
                         multiDexListTask.doFirst {
@@ -764,5 +767,3 @@ class FreelinePlugin implements Plugin<Project> {
     }
 
 }
-
-

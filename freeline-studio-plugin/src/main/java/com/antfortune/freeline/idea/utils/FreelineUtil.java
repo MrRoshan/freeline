@@ -306,8 +306,9 @@ public class FreelineUtil {
                                     for (ArtifactDependencyModel model1 : artifactDependencyModels) {
                                         ArtifactDependencyModelWrapper wrapper = new ArtifactDependencyModelWrapper(model1);
                                         if (wrapper.group().equals(Constant.ANDROID_GRADLE_TOOL_GROUP_NAME)) {
-                                            ArtifactDependencySpec spec = new ArtifactDependencySpec(dependencyEntity.getArtifactId(),
-                                                    dependencyEntity.getGroupId(), dependencyEntity.getNewestReleaseVersion());
+                                            // ArtifactDependencySpec spec = new ArtifactDependencySpec(dependencyEntity.getArtifactId(),
+                                                    // dependencyEntity.getGroupId(), dependencyEntity.getNewestReleaseVersion());
+                                            ArtifactDependencySpec spec = ArtifactDependencySpec.create(dependencyEntity.getArtifactId(), dependencyEntity.getGroupId(), dependencyEntity.getNewestReleaseVersion());
                                             model.buildscript().dependencies().addArtifact("classpath", spec);
                                             model.applyChanges();
                                             needReformatCode = true;

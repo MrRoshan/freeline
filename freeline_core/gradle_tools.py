@@ -377,10 +377,12 @@ class GradleDirectoryFinder(android_tools.DirectoryFinder):
         if self._config is not None and 'product_flavor' in self._config:
             if self._module_name == self._config['main_project_name']:
                 if self._config['product_flavor'] == '' or self._config['product_flavor'] == 'debug':
-                    path = os.path.join(self.get_base_gen_dir(), 'manifests', 'full', 'debug', 'AndroidManifest.xml')
+                    #path = os.path.join(self.get_base_gen_dir(), 'manifests', 'full', 'debug', 'AndroidManifest.xml')
+                    path = os.path.join(self.get_base_gen_dir(), 'merged_manifests', 'debug', 'processDebugManifest', 'merged', 'AndroidManifest.xml')
                 else:
-                    path = os.path.join(self.get_base_gen_dir(), 'manifests', 'full', self._config['product_flavor'],
-                                        'debug', 'AndroidManifest.xml')
+                    #path = os.path.join(self.get_base_gen_dir(), 'manifests', 'full', self._config['product_flavor'],
+                    #                    'debug', 'AndroidManifest.xml')
+                    path = os.path.join(self.get_base_gen_dir(), 'merged_manifests', self._config['product_flavor'] + 'Debug', 'process'+ self._config['product_flavor'].capitalize() +'DebugManifest', 'merged', 'AndroidManifest.xml')
                 if os.path.exists(path):
                     return path
         path = android_tools.find_manifest(os.path.join(self.get_base_gen_dir(), 'manifests'))
@@ -426,13 +428,19 @@ class GradleDirectoryFinder(android_tools.DirectoryFinder):
         if self._config is not None and 'product_flavor' in self._config:
             if self._module_name == self._config['main_project_name']:
                 if self._config['product_flavor'] == '' or self._config['product_flavor'] == 'debug':
-                    return os.path.join(self.get_base_gen_dir(), 'classes', 'debug')
+                    # return os.path.join(self.get_base_gen_dir(), 'classes', 'debug')
+                    return os.path.join(self.get_base_gen_dir(), 'javac', 'debug', 'compileDebugJavaWithJavac', 'classes')
                 else:
-                    return os.path.join(self.get_base_gen_dir(), 'classes', self._config['product_flavor'], 'debug')
+                    # return os.path.join(self.get_base_gen_dir(), 'classes', self._config['product_flavor'], 'debug')
+                    subName = self._config['product_flavor'] + 'Debug'
+                    sName = 'compile' + self._config['product_flavor'].capitalize() + 'DebugJavaWithJavac'
+                    return os.path.join(self.get_base_gen_dir(), 'javac', subName, sName, 'classes')
             else:
-                release_dir = os.path.join(self.get_base_gen_dir(), 'classes', 'release')
+                # release_dir = os.path.join(self.get_base_gen_dir(), 'classes', 'release')
+                release_dir = os.path.join(self.get_base_gen_dir(), 'javac', 'release', 'compileDebugJavaWithJavac', 'classes')
                 if not os.path.exists(release_dir):
-                    release_dir = os.path.join(self.get_base_gen_dir(), 'classes', 'debug')
+                    # release_dir = os.path.join(self.get_base_gen_dir(), 'classes', 'debug')
+                    release_dir = os.path.join(self.get_base_gen_dir(), 'javac', 'debug', 'compileDebugJavaWithJavac', 'classes')
                 return release_dir
         return GradleDirectoryFinder.find_dst_classes_dir(self.get_base_gen_dir(), package_name=self._package_name)
 

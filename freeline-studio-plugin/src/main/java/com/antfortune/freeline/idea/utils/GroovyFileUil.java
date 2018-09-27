@@ -42,6 +42,11 @@ public class GroovyFileUil {
             public boolean apply(@Nullable GrMethodCall input) {
                 return input != null && methodName.equals(getMethodCallName(input));
             }
+
+            @Override
+            public boolean test(@javax.annotation.Nullable GrMethodCall input) {
+                return false;
+            }
         });
     }
 

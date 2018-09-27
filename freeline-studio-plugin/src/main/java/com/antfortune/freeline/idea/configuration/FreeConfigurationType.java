@@ -21,4 +21,9 @@ public class FreeConfigurationType extends ConfigurationTypeBase {
         super(ID, DISPLAY_NAME, DESC, ICON);
         this.addFactory(new FreeConfigurationFactory(this));
     }
+
+    @Override
+    public boolean isDumbAware() {
+        return false;
+    }
 }

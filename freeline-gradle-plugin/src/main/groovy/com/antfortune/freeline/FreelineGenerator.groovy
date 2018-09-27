@@ -59,10 +59,20 @@ class FreelineGenerator {
 
     public static String generateProjectBuildAssetsPath(String buildDir, String productFlavor) {
         if (isNormalProductFlavor(productFlavor)) {
-            return FreelineUtils.joinPath(buildDir, "intermediates", "assets", "debug")
+            // return FreelineUtils.joinPath(buildDir, "intermediates", "assets", "debug")
+            return FreelineUtils.joinPath(buildDir, "intermediates", "merged_assets", "debug", getBuildAssetsSubPath(""), "out")
         } else {
-            return FreelineUtils.joinPath(buildDir, "intermediates", "assets", productFlavor, "debug")
+            // return FreelineUtils.joinPath(buildDir, "intermediates", "assets", productFlavor, "debug")
+            return FreelineUtils.joinPath(buildDir, "intermediates", "merged_assets", productFlavor + "Debug", getBuildAssetsSubPath(productFlavor), "out")
         }
+    }
+
+    public static String getBuildAssetsSubPath(String subName) {
+        if(subName.equalsIgnoreCase("")) {
+            return "mergeDebugAssets"
+        }
+
+        return "merge" + subName.substring(0, 1).toUpperCase() + subName.substring(1) + "DebugAssets"
     }
 
     public static String generateProjectBuildJniFolderPath(String buildDir, String productFlavor) {
@@ -92,5 +102,5 @@ class FreelineGenerator {
                 .build()
         configFile.writeTo(outputDirectory)
     }
-    
+
 }

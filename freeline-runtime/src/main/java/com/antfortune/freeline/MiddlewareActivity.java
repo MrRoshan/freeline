@@ -25,15 +25,15 @@ public class MiddlewareActivity extends Activity {
         public void run() {
 
             //通过定时器启动提高重新启动应用的成功率
-            Context context = MiddlewareActivity.this;
-
-            Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-            AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + DELAY_TIME, pendingIntent);
+            // Context context = MiddlewareActivity.this;
+            //
+            // Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+            // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            //
+            // PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            //
+            // AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            // mgr.set(AlarmManager.RTC, System.currentTimeMillis() + DELAY_TIME, pendingIntent);
 
             Log.d(TAG, "kill process: " + Process.myPid());
             Process.killProcess(Process.myPid());

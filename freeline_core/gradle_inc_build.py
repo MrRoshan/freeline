@@ -102,7 +102,7 @@ class GradleIncBuilder(IncrementalBuilder):
                 self.debug('find {} modules have res changed'.format(key))
                 return True
         return False
-        
+
     def __get_class_full_name(self, file_path):
         class_full_name = "";
 
@@ -112,14 +112,14 @@ class GradleIncBuilder(IncrementalBuilder):
 
         if (index > -1):
             class_full_name = file_path
-            
+
             class_full_name = class_full_name.replace("\\", "/")
             last_index = class_full_name.rfind(".java")
             class_full_name = class_full_name[index:last_index]
             class_full_name = class_full_name.replace("/", ".")
 
         return class_full_name;
-    
+
     def __get_package(self, file_path):
         if file_path.rfind(".java") == -1:
             return ""
@@ -132,16 +132,16 @@ class GradleIncBuilder(IncrementalBuilder):
             package_name = package_name[0:index]
 
         return package_name;
-       
+
     def __update_class_related(self):
         # update class related
-        
+
         changed_java_files = []
-        
+
         for module, file_dict in self._changed_files['projects'].iteritems():
             if len(file_dict['src']) > 0:
                 changed_java_files.extend(file_dict['src'])
-        
+
         # process changed java files
         if len(changed_java_files) > 0:
             # update stat_cache.json
@@ -149,21 +149,21 @@ class GradleIncBuilder(IncrementalBuilder):
             changefiles = ';'.join(changed_java_files)
             class_related_args = ['java', '-jar', os.path.join('freeline', 'release-tools', 'classrelated.jar'), cache_path, changefiles]
             self.debug('update class related: ' + ' '.join(class_related_args))
-            show_gradle_log = False
-            if ArgsConfig.args is not None and ('gradlelog' in ArgsConfig.args and ArgsConfig.args.gradlelog):
-                show_gradle_log = True
-            output, err, code = cexec(class_related_args, callback=None, use_stdout=show_gradle_log)
-            
+            #show_gradle_log = False
+            #if ArgsConfig.args is not None and ('gradlelog' in ArgsConfig.args and ArgsConfig.args.gradlelog):
+            show_gradle_log = True
+            output, err, code = cexec(class_related_args, callback=None)
+
             # read from stat_cache.json
             stat_cache = load_json_cache(cache_path)
-            
+
             # ignore files
             ignore_java_files = ['UCR.java', 'UCContentProvider.java']
-            
+
             related_files = []
-            
+
             package_map = {}
-            
+
             # read all package java files
             for module, file_dict in stat_cache.items():
                 for file in file_dict.keys():
@@ -171,14 +171,14 @@ class GradleIncBuilder(IncrementalBuilder):
 
                     if package_name == '':
                         continue
-                    
+
                     if not package_map.has_key(package_name):
                         same_package_files = []
                         package_map[package_name] = same_package_files
                     else:
                         same_package_files = package_map.get(package_name);
                     same_package_files.append(file)
-            
+
             # read all related java files
             for file in changed_java_files:
                 for module, file_dict in stat_cache.items():
@@ -186,7 +186,7 @@ class GradleIncBuilder(IncrementalBuilder):
                         file_stat = file_dict[file]
                         if file_stat.has_key('related'):
                             related_files.extend(file_stat['related'])
-                
+
                 # read all same package files
                 package_name = self.__get_package(file)
                 if package_name != '' and package_map.has_key(package_name):
@@ -207,7 +207,7 @@ class GradleIncBuilder(IncrementalBuilder):
 
     def __changed_modules(self):
         self.__update_class_related()
-    
+
         modules = []
         for module, file_dict in self._changed_files['projects'].iteritems():
             if len(file_dict['src']) > 0 or len(file_dict['res']) or len(file_dict['assets']) > 0:
